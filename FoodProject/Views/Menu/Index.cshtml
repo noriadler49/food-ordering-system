@@ -1,0 +1,66 @@
+﻿
+@using System.Security.Claims
+@{
+    var userRole = User.FindFirstValue(ClaimTypes.Role);
+}
+
+<div class="container mt-4">
+    <h2 class="text-center text-danger">Our Menu</h2>
+
+    <!-- Category Selection -->
+    <div class="text-center mb-3">
+        <a href="@Url.Action("Index", new { category = "All", searchString = ViewBag.SearchString })"
+           class="btn @(ViewBag.SelectedCategory == "All" ? "btn-danger" : "btn-outline-danger")">All</a>
+        <a href="@Url.Action("Index", new { category = "Food", searchString = ViewBag.SearchString })"
+           class="btn @(ViewBag.SelectedCategory == "Food" ? "btn-danger" : "btn-outline-danger")">Food</a>
+        <a href="@Url.Action("Index", new { category = "Drink", searchString = ViewBag.SearchString })"
+           class="btn @(ViewBag.SelectedCategory == "Drink" ? "btn-danger" : "btn-outline-danger")">Drink</a>
+    </div>
+    @* <div> *@
+    @*     @("abc") *@
+    @* </div> *@
+    <!-- Search Bar -->
+    <form asp-action="Index" method="get" class="d-flex justify-content-center mb-3">
+        <input type="hidden" name="category" value="@ViewBag.SelectedCategory" />
+        <input type="text" name="searchString" value="@ViewBag.SearchString" class="form-control w-25" placeholder="Search dishes...">
+        <button type="submit" class="btn btn-danger ms-2">Search</button>
+    </form>
+
+    <div class="row">
+        @foreach (var item in Model)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card shadow-sm">
+                    <img src="@item.ImageUrl" class="card-img-top img-fluid" style="height: 250px; object-fit: cover;">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">@item.Name</h5>
+                        <p class="text-muted">Category: @item.Category</p>
+                        <p class="card-text text-success">@item.Price.ToString("N2") Dollars</p>
+                        <a href="@Url.Action("Details", new { id = item.Id })" class="btn btn-primary">View Dish</a>
+
+                        <!-- Staff Actions -->
+                        @if (userRole == "Staff")
+                        {
+                            <div class="mt-2 d-flex justify-content-center">
+                                <a href="@Url.Action("Edit", "Menu", new { id = item.Id })" class="btn btn-warning me-2">Modify</a>
+
+                                <form asp-action="Delete" asp-route-id="@item.Id" method="post" onsubmit="return confirm('Are you sure you want to delete this dish?');">
+                                    <button type="submit" class="btn btn-danger">Remove</button>
+                                </form>
+                            </div>
+                        }
+
+                        <!-- Cart Button (Only for Users) -->
+                        @if (userRole == "User")
+                        {
+                            <form asp-controller="Cart" asp-action="AddToCart" method="post" class="mt-2">
+                                <input type="hidden" name="dishId" value="@item.Id" />
+                                <button type="submit" class="btn btn-success">Add to Cart</button>
+                            </form>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

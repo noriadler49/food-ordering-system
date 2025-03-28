@@ -1,0 +1,87 @@
+﻿@model List<FoodProject.Models.Order>
+
+@{
+    ViewData["Title"] = "My Orders";
+}
+
+<div class="container">
+    <h2 class="mb-4 text-danger">My Orders</h2>
+
+    @if (!Model.Any())
+    {
+        <p>You have no orders yet.</p>
+    }
+    else
+    {
+        <table class="table cart-table">
+            <thead>
+                <tr>
+                    <th>Order ID</th>
+                    <th>Total Price</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var order in Model)
+                {
+                    <tr>
+                        <td>@order.Id</td>
+                        <td>@order.TotalPrice.ToString("N2")</td>
+                        <td>@order.Status</td>
+                        <td>
+                            <a href="@Url.Action("OrderConfirmation", "Checkout", new { orderId = order.Id })" class="btn btn-info btn-sm">View Order Details</a>
+                            @if (order.Status == "Delivering")
+                            {
+                                <form asp-action="ConfirmOrderReceived" method="post" style="display: inline-block;">
+                                    <input type="hidden" name="orderId" value="@order.Id" />
+                                    <button type="submit" class="btn btn-success btn-sm">Mark as Received</button>
+                                </form>
+                            }
+                            else if (order.Status == "Pending")
+                            {
+                                <form asp-action="CancelOrder" method="post" style="display: inline-block;">
+                                    <input type="hidden" name="orderId" value="@order.Id"/>
+                                    <button type="submit" class="btn btn-success btn-sm">Cancel order</button>
+                                </form>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>
+
+<style>
+    /* Table Styling */
+    .cart-table {
+        border-radius: 10px;
+        overflow: hidden;
+        border-collapse: separate;
+        border-spacing: 0;
+    }
+
+    .cart-table thead {
+        background-color: #b30000;
+        color: white;
+    }
+
+    .cart-table thead th {
+        padding: 12px;
+        text-align: center;
+    }
+
+    .cart-table tbody tr {
+        transition: all 0.3s ease-in-out;
+    }
+
+    .cart-table tbody tr:hover {
+        background-color: #ffe6e6;
+    }
+
+    .cart-table th,
+    .cart-table td {
+        text-align: center;
+        vertical-align: middle;
+    }

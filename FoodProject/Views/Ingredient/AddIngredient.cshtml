@@ -1,0 +1,73 @@
+﻿@model List<FoodProject.Models.Ingredient>
+
+@{
+    ViewData["Title"] = "Add Ingredient";
+}
+<script>
+    function deleteIngredient(id) {
+        if (!confirm("Are you sure you want to delete this ingredient?")) {
+            return;
+        }
+
+        fetch(`/Ingredient/DeleteIngredient/${id}`, {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Remove the row from the table
+                document.getElementById(`row-${id}`).remove();
+            } else {
+                alert("Error deleting ingredient.");
+            }
+        })
+        .catch(error => console.error("Error:", error));
+    }
+</script>
+
+<div class="container mt-4">
+    <h2 class="text-danger">Add Ingredient</h2>
+
+    <form asp-action="AddIngredient" method="post" class="mb-4">
+        <div class="mb-3">
+            <label class="form-label">Name</label>
+            <input type="text" class="form-control" name="Name" required />
+        </div>
+        <button type="submit" class="btn btn-danger">Add</button>
+        <a class="btn btn-secondary" asp-action="Index" asp-controller="Menu">Cancel</a>
+    </form>
+
+    <hr />
+
+    <h3 class="text-danger">Existing Ingredients</h3>
+    <table class="table table-bordered">
+        <thead class="bg-danger text-white">
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody id="ingredientTableBody">
+            @foreach (var ingredient in Model)
+            {
+                <tr id="row-@ingredient.Id">
+                    <td>@ingredient.Id</td>
+                    <td>@ingredient.Name</td>
+                    <td>
+                        <button class="btn btn-sm btn-danger" onclick="deleteIngredient(@ingredient.Id)">Delete</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</div>
+
+<style>
+    .container {
+        max-width: 600px;
+        margin: auto;
+    }
+</style>

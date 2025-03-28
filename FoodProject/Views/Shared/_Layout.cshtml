@@ -1,0 +1,178 @@
+﻿<!DOCTYPE html>
+<style>
+    body {
+    padding-top: 70px;
+    }
+    .navbar {
+    background-color: #b30000;
+    padding: 12px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    margin-bottom: 30px;
+    }
+
+    .navbar .navbar-brand {
+    font-size: 1.5rem;
+    color: white !important;
+    }
+
+    .navbar-nav .nav-link {
+    color: white !important;
+    font-weight: bold;
+    margin-right: 10px;
+    transition: all 0.3s ease-in-out;
+    }
+
+    .navbar-nav .nav-link:hover {
+    color: #ffcccc !important;
+    transform: scale(1.05);
+    }
+
+    .nav-item.dropdown:hover .dropdown-menu {
+    display: block;
+    margin-top: 0;
+    }
+
+    .search-form {
+    display: flex;
+    align-items: center;
+    }
+
+    .search-input {
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+    border: none;
+    padding: 8px 12px;
+    width: 200px;
+    }
+
+    .search-btn {
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+    background-color: white;
+    border: none;
+    padding: 8px 12px;
+    cursor: pointer;
+    color: #b30000;
+    transition: all 0.3s ease-in-out;
+    }
+
+    .search-btn:hover {
+    background-color: #ffcccc;
+    }
+
+    .cart-link {
+    font-weight: bold;
+    color: white !important;
+    transition: all 0.3s ease-in-out;
+    }
+
+    .cart-link:hover {
+    color: #ffcccc !important;
+    }
+
+    .logout-btn {
+    background-color: white;
+    color: #b30000 !important;
+    font-weight: bold;
+    border-radius: 5px;
+    padding: 6px 12px;
+    }
+
+    .logout-btn:hover {
+    background-color: #ffcccc;
+    color: #800000 !important;
+    }
+</style>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - FoodProject</title>
+    <script type="importmap"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/FoodProject.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+            <div class="container-fluid">
+                <div class="d-flex align-items-center">
+                    <a class="navbar-brand fw-bold me-3" asp-area="" asp-controller="Menu" asp-action="Index">Menu</a>
+
+
+
+                    @* <a class="nav-link cart-link ms-3" asp-controller="Cart" asp-action="Index"><i class="fa-solid fa-shopping-cart"></i> Cart</a> *@
+                </div>
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                    <ul class="navbar-nav">
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            if (User.IsInRole("Staff"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-controller="Checkout" asp-action="Orders">Orders</a>
+                                </li>
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="addDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Add
+                                    </a>
+                                    <ul class="dropdown-menu" aria-labelledby="addDropdown">
+                                        <li><a class="dropdown-item" asp-controller="Menu" asp-action="AddDish">Add Dish</a></li>
+                                        <li><a class="dropdown-item" asp-controller="Ingredient" asp-action="AddIngredient">Add Ingredient</a></li>
+                                    </ul>
+                                </li>
+                            }
+                            if (User.IsInRole("User"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-controller="Cart" asp-action="Index"><i class="fa-solid fa-shopping-cart"></i> Cart</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-controller="Checkout" asp-action="MyOrders">My Orders</a>
+                                </li>
+                            }
+                         
+                            <li class="nav-item">
+                                <a class="nav-link btn logout-btn" asp-controller="Account" asp-action="Logout">Logout</a>
+                            </li>
+                        }
+
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Account" asp-action="Login">Login</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Account" asp-action="Register">Register</a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+   
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

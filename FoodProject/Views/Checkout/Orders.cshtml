@@ -1,0 +1,74 @@
+﻿@model List<FoodProject.Models.Order>
+
+@{
+    ViewData["Title"] = "All Orders";
+}
+<style>
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    th, td {
+        text-align: center;
+        padding: 10px;
+        border: 1px solid #ddd;
+    }
+
+    th {
+        background-color: #dc3545; /* Red theme */
+        color: white;
+        font-weight: bold;
+    }
+
+    td {
+        vertical-align: middle;
+    }
+
+    .btn {
+        padding: 5px 10px;
+        border-radius: 5px;
+    }
+
+</style>
+<h2 class="text-danger">All Orders</h2>
+
+@if (!Model.Any())
+{
+    <p>No orders found.</p>
+}
+else
+{
+    <table class="table table-bordered">
+        <thead class="bg-danger text-white">
+            <tr>
+                <th>Order ID</th>
+                <th>Customer</th>
+                <th>Total Price</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var order in Model)
+            {
+                <tr>
+                    <td>@order.Id</td>
+                    <td>@order.Account.Username</td>
+                    <td>@order.TotalPrice.ToString("N2")</td>
+                    <td>@order.Status</td>
+                    <td>
+                        @if (order.Status == "Pending")
+                        {
+                            <form asp-action="UpdateOrderStatus" method="post">
+                                <input type="hidden" name="orderId" value="@order.Id" />
+                                <input type="hidden" name="newStatus" value="Delivering" />
+                                <button type="submit" class="btn btn-warning btn-sm">Mark as Delivering</button>
+                            </form>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

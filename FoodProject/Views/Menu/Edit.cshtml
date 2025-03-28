@@ -1,0 +1,53 @@
+﻿@model FoodProject.Models.DishEditViewModel
+@{
+    ViewData["Title"] = "Edit Dish";
+}
+
+<h2>Edit Dish</h2>
+
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="Dish.Id" />
+
+    <div class="mb-3">
+        <label>Name</label>
+        <input type="text" class="form-control" asp-for="Dish.Name" required />
+    </div>
+
+    <div class="mb-3">
+        <label>Image URL</label>
+        <input type="text" class="form-control" asp-for="Dish.ImageUrl" required />
+    </div>
+
+    <div class="mb-3">
+        <label>Price</label>
+        <input type="number" class="form-control" asp-for="Dish.Price" step="0.01" required />
+    </div>
+
+    <div class="mb-3">
+        <label>Description</label>
+        <textarea class="form-control" asp-for="Dish.Description" required></textarea>
+    </div>
+
+    <div class="mb-3">
+        <label>Category</label>
+        <select class="form-control" asp-for="Dish.Category">
+            <option value="Food">Food</option>
+            <option value="Drink">Drink</option>
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label>Ingredients</label>
+        <select class="form-control" asp-for="SelectedIngredientIds" multiple>
+            @foreach (var ingredient in Model.AllIngredients)
+            {
+                <option value="@ingredient.Id" selected="@Model.SelectedIngredientIds.Contains(ingredient.Id)">
+                    @ingredient.Name
+                </option>
+            }
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+    <a class="btn btn-secondary" asp-action="Index">Cancel</a>
+</form>

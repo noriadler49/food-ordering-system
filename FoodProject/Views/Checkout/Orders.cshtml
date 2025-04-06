@@ -3,34 +3,7 @@
 @{
     ViewData["Title"] = "All Orders";
 }
-<style>
-    table {
-        width: 100%;
-        border-collapse: collapse;
-    }
 
-    th, td {
-        text-align: center;
-        padding: 10px;
-        border: 1px solid #ddd;
-    }
-
-    th {
-        background-color: #dc3545; /* Red theme */
-        color: white;
-        font-weight: bold;
-    }
-
-    td {
-        vertical-align: middle;
-    }
-
-    .btn {
-        padding: 5px 10px;
-        border-radius: 5px;
-    }
-
-</style>
 <h2 class="text-danger">All Orders</h2>
 
 @if (!Model.Any())
@@ -39,6 +12,18 @@
 }
 else
 {
+    <!-- Status Filter Buttons -->
+    <div class="text-center mb-3">
+        <a href="@Url.Action(ViewContext.RouteData.Values["action"].ToString(), new { status = "All" })"
+           class="btn @(ViewBag.SelectedStatus == "All" ? "btn-danger" : "btn-outline-danger")">All</a>
+        <a href="@Url.Action(ViewContext.RouteData.Values["action"].ToString(), new { status = "Pending" })"
+           class="btn @(ViewBag.SelectedStatus == "Pending" ? "btn-danger" : "btn-outline-danger")">Pending</a>
+        <a href="@Url.Action(ViewContext.RouteData.Values["action"].ToString(), new { status = "Delivering" })"
+           class="btn @(ViewBag.SelectedStatus == "Delivering" ? "btn-danger" : "btn-outline-danger")">Delivering</a>
+        <a href="@Url.Action(ViewContext.RouteData.Values["action"].ToString(), new { status = "Received" })"
+           class="btn @(ViewBag.SelectedStatus == "Received" ? "btn-danger" : "btn-outline-danger")">Received</a>
+    </div>
+
     <table class="table table-bordered">
         <thead class="bg-danger text-white">
             <tr>
@@ -72,3 +57,31 @@ else
         </tbody>
     </table>
 }
+<style>
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    th, td {
+        text-align: center;
+        padding: 10px;
+        border: 1px solid #ddd;
+    }
+
+    th {
+        background-color: #dc3545; /* Red theme */
+        color: white;
+        font-weight: bold;
+    }
+
+    td {
+        vertical-align: middle;
+    }
+
+    .btn {
+        padding: 5px 10px;
+        border-radius: 5px;
+    }
+
+</style>

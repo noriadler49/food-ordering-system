@@ -30,7 +30,6 @@ namespace FoodProject.Controllers
         {
             try
             {
-                // Don't even check ModelState - just try to save
                 account.Role = "User";
                 account.Password = HashPassword(account.Password);
 
@@ -74,8 +73,8 @@ namespace FoodProject.Controllers
                     var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Name, user.Username),
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()), // ✅ Store AccountId here
-                new Claim("AccountId", user.Id.ToString()), // ✅ This ensures Cart & Orders work
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new Claim("AccountId", user.Id.ToString()),
                 new Claim(ClaimTypes.Role, user.Role)
             };
 

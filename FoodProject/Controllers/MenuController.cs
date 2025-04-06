@@ -34,19 +34,16 @@ namespace FoodProject.Controllers
         {
             var dishes = _context.Dishes.AsQueryable();
 
-            // Apply category filter if it's not "All"
             if (!string.IsNullOrEmpty(category) && category != "All")
             {
                 dishes = dishes.Where(d => d.Category == category);
             }
 
-            // Apply search filter if searchString is provided
             if (!string.IsNullOrEmpty(searchString))
             {
                 dishes = dishes.Where(d => d.Name.Contains(searchString));
             }
 
-            // Store the selected category in ViewBag for UI use
             ViewBag.SelectedCategory = category;
             ViewBag.SearchString = searchString;
 
@@ -80,7 +77,7 @@ namespace FoodProject.Controllers
             var viewModel = new DishEditViewModel
             {
                 Dish = dish,
-                AllIngredients = ingredients ?? new List<Ingredient>(), // Đảm bảo không bị null
+                AllIngredients = ingredients ?? new List<Ingredient>(),
                 SelectedIngredientIds = dish.DishIngredients?.Select(di => di.IngredientId).ToList() ?? new List<int>()
             };
 
@@ -96,13 +93,11 @@ namespace FoodProject.Controllers
                                       .FirstOrDefault(d => d.Id == model.Dish.Id);
             if (dish == null) return NotFound();
 
-            // Update dish properties
             dish.Name = model.Dish.Name;
             dish.Description = model.Dish.Description;
             dish.ImageUrl = model.Dish.ImageUrl;
             dish.Price = model.Dish.Price;
 
-            // Update Ingredients
             dish.DishIngredients.Clear();
             if (model.SelectedIngredientIds != null)
             {

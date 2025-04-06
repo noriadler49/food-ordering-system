@@ -17,7 +17,7 @@ namespace FoodProject.Controllers
             _context = context;
             
         }
-
+        
         public async Task<IActionResult> Index()
         {
             var cartItems = await _context.CartItems
@@ -72,18 +72,43 @@ namespace FoodProject.Controllers
             return RedirectToAction("OrderConfirmation", new { orderId = order.Id });
         }
         [Authorize]
-        public async Task<IActionResult> MyOrders()
+        public async Task<IActionResult> MyOrders(string status = "All")
         {
             var accountId = int.Parse(User.FindFirst("AccountId")?.Value);
 
-            var orders = await _context.Orders
+            var ordersQuery = _context.Orders
                 .Include(o => o.OrderItems)
-                .ThenInclude(oi => oi.Dish)
-                .Where(o => o.AccountId == accountId) // ✅ Fetch only the logged-in user's orders
-                .ToListAsync();
+                    .ThenInclude(oi => oi.Dish)
+                .Where(o => o.AccountId == accountId)
+                .AsQueryable();
 
-            return View(orders);
+            if (!string.IsNullOrEmpty(status) && status != "All")
+            {
+                ordersQuery = ordersQuery.Where(o => o.Status == status);
+            }
+
+            ViewBag.SelectedStatus = status;
+            return View(await ordersQuery.ToListAsync());
         }
+
+        [Authorize(Roles = "Staff")]
+        public async Task<IActionResult> Orders(string status = "All")
+        {
+            var ordersQuery = _context.Orders
+                .Include(o => o.Account)
+                .Include(o => o.OrderItems)
+                    .ThenInclude(oi => oi.Dish)
+                .AsQueryable();
+
+            if (!string.IsNullOrEmpty(status) && status != "All")
+            {
+                ordersQuery = ordersQuery.Where(o => o.Status == status);
+            }
+
+            ViewBag.SelectedStatus = status;
+            return View(await ordersQuery.ToListAsync());
+        }
+
 
         public async Task<IActionResult> OrderConfirmation(int orderId)
         {
@@ -92,7 +117,7 @@ namespace FoodProject.Controllers
             var order = await _context.Orders
                 .Include(o => o.OrderItems)
                 .ThenInclude(oi => oi.Dish)
-                .FirstOrDefaultAsync(o => o.Id == orderId && o.AccountId == accountId); // ✅ Ensure only user can see their order
+                .FirstOrDefaultAsync(o => o.Id == orderId && o.AccountId == accountId);
 
             if (order == null)
             {
@@ -102,17 +127,7 @@ namespace FoodProject.Controllers
             return View(order);
         }
 
-        [Authorize(Roles = "Staff")]
-        public async Task<IActionResult> Orders()
-        {
-            var orders = await _context.Orders
-                .Include(o => o.Account)
-                .Include(o => o.OrderItems)
-                .ThenInclude(oi => oi.Dish)
-                .ToListAsync();
-
-            return View(orders);
-        }
+        
 
         [HttpPost]
         [Authorize(Roles = "Staff")]

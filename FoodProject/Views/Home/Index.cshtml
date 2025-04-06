@@ -1,8 +1,66 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Welcome to Our Food Ordering Service!";
 }
-
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <!-- First row: Simple welcome text -->
+    <h1 class="display-4">Welcome to Our Food Ordering Service!</h1>
+    <p class="lead">Order your favorite dishes and get them delivered to your doorstep!</p>
 </div>
+<div class="row mt-4">
+    <!-- Second row: Display three random dishes -->
+    <h2 class="text-center">Featured Dishes</h2>
+    <div class="col-md-4">
+        <div class="card h-100">
+            <img src="@Model.Dishes[0].ImageUrl" class="card-img-top" alt="@Model.Dishes[0].Name">
+            <div class="card-body d-flex flex-column">
+                <h5 class="card-title">@Model.Dishes[0].Name</h5>
+                <p class="card-text flex-grow-1">@Model.Dishes[0].Description</p>
+                <p class="card-text"><strong>@Model.Dishes[0].Price.ToString("C")</strong></p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100">
+            <img src="@Model.Dishes[1].ImageUrl" class="card-img-top" alt="@Model.Dishes[1].Name">
+            <div class="card-body d-flex flex-column">
+                <h5 class="card-title">@Model.Dishes[1].Name</h5>
+                <p class="card-text flex-grow-1">@Model.Dishes[1].Description</p>
+                <p class="card-text"><strong>@Model.Dishes[1].Price.ToString("C")</strong></p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100">
+            <img src="@Model.Dishes[2].ImageUrl" class="card-img-top" alt="@Model.Dishes[2].Name">
+            <div class="card-body d-flex flex-column">
+                <h5 class="card-title">@Model.Dishes[2].Name</h5>
+                <p class="card-text flex-grow-1">@Model.Dishes[2].Description</p>
+                <p class="card-text"><strong>@Model.Dishes[2].Price.ToString("C")</strong></p>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="text-center mt-5">
+    <!-- Third row: Display the number of users (popularity) -->
+    <h3>Join the Thousands of Happy Customers!</h3>
+    <h3>There are <strong>@Model.TotalUsers</strong> total of users are using our service</h3>
+</div>
+<style>
+    .card {
+        margin-bottom: 20px;
+    }
+
+    .lead {
+        font-size: 1.5rem;
+        color: #555;
+    }
+
+    .display-4 {
+        color: #e74c3c;
+    }
+
+    .card-img-top {
+        height: 200px;
+        object-fit: cover;
+    }
+</style>

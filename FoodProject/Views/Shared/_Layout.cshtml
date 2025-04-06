@@ -1,4 +1,11 @@
-﻿<!DOCTYPE html>
+﻿@using System.Security.Claims
+@{
+    var username = User.Identity?.IsAuthenticated == true
+        ? User.FindFirstValue(ClaimTypes.Name)
+        : null;
+}
+
+<!DOCTYPE html>
 <style>
     body {
     padding-top: 70px;
@@ -103,6 +110,7 @@
         <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
             <div class="container-fluid">
                 <div class="d-flex align-items-center">
+                    <a class="navbar-brand fw-bold me-3" asp-controller="Home" asp-action="Index">Home</a>
                     <a class="navbar-brand fw-bold me-3" asp-area="" asp-controller="Menu" asp-action="Index">Menu</a>
 
 
@@ -117,6 +125,8 @@
 
                 <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                     <ul class="navbar-nav">
+                        
+
                         @if (User.Identity.IsAuthenticated)
                         {
                             if (User.IsInRole("Staff"))
@@ -143,12 +153,17 @@
                                     <a class="nav-link" asp-controller="Checkout" asp-action="MyOrders">My Orders</a>
                                 </li>
                             }
-                         
+
+                            <!-- Show Username -->
+                            <li class="nav-item d-flex align-items-center">
+                                <span class="nav-link text-white fw-bold">Hello, @username!</span>
+                            </li>
+
+                            <!-- Logout Button -->
                             <li class="nav-item">
                                 <a class="nav-link btn logout-btn" asp-controller="Account" asp-action="Logout">Logout</a>
                             </li>
                         }
-
                         else
                         {
                             <li class="nav-item">
@@ -159,6 +174,7 @@
                             </li>
                         }
                     </ul>
+
                 </div>
             </div>
         </nav>

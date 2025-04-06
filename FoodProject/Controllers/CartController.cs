@@ -19,17 +19,16 @@ namespace FoodProject.Controllers
             _context = context;
         }
 
-        // ✅ Display the cart (only for the logged-in user)
         public async Task<IActionResult> Index()
         {
             if (!int.TryParse(User.FindFirst("AccountId")?.Value, out int accountId))
             {
-                return RedirectToAction("Login", "Account"); // ✅ Redirect if not logged in
+                return RedirectToAction("Login", "Account");
             }
 
             var cartItems = await _context.CartItems
                 .Include(ci => ci.Dish)
-                .Where(ci => ci.AccountId == accountId) // ✅ Only fetch user's cart items
+                .Where(ci => ci.AccountId == accountId)
                 .ToListAsync();
 
             ViewBag.TotalPrice = cartItems.Sum(ci => ci.Dish.Price * ci.Quantity);
@@ -43,7 +42,7 @@ namespace FoodProject.Controllers
         {
             if (!int.TryParse(User.FindFirst("AccountId")?.Value, out int accountId))
             {
-                return RedirectToAction("Login", "Account"); // ✅ Redirect to login if not authenticated
+                return RedirectToAction("Login", "Account");
             }
 
             var dish = await _context.Dishes.FirstOrDefaultAsync(d => d.Id == dishId);

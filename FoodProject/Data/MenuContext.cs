@@ -148,5 +148,6 @@ namespace FoodProject.Data
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
         public DbSet<Account> Accounts { get; set; }
+        public DbSet<Voucher> Vouchers { get; set; }
     }
 }

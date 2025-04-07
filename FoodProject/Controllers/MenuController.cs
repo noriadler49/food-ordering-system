@@ -125,6 +125,44 @@ namespace FoodProject.Controllers
             _context.SaveChanges();
             return RedirectToAction("Index");
         }
+        [Authorize(Roles = "Staff")]
+        public async Task<IActionResult> AddVoucher()
+        {
+            var viewModel = new Tuple<Voucher, List<Voucher>>(
+                new Voucher(),
+                await _context.Vouchers.ToListAsync()
+            );
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Staff")]
+        public async Task<IActionResult> AddVoucher(Voucher voucher)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Vouchers.Add(voucher);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("AddVoucher");
+            }
+
+            var vouchers = await _context.Vouchers.ToListAsync();
+            return View(new Tuple<Voucher, List<Voucher>>(voucher, vouchers));
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Staff")]
+        public async Task<IActionResult> RemoveVoucher(int id)
+        {
+            var voucher = await _context.Vouchers.FindAsync(id);
+            if (voucher != null)
+            {
+                _context.Vouchers.Remove(voucher);
+                await _context.SaveChangesAsync();
+            }
+
+            return RedirectToAction("AddVoucher");
+        }
 
     }
 }

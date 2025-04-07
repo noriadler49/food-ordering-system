@@ -77,7 +77,10 @@
             }
         </tbody>
     </table>
-
+    @if (!string.IsNullOrEmpty(Model.VoucherCode))
+    {
+        <p><strong>Voucher Used:</strong> @Model.VoucherCode</p>
+    }
     <p class="total-price">Total Price: @Model.TotalPrice.ToString("N2") Dollars</p>
 
     <a class="btn btn-info continue-btn" asp-controller="Menu" asp-action="Index">Continue Shopping</a>

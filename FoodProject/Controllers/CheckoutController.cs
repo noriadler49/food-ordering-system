@@ -31,46 +31,7 @@ namespace FoodProject.Controllers
             return View();
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> PlaceOrder()
-        {
-            var accountId = int.Parse(User.FindFirst("AccountId")?.Value);
 
-            var cartItems = await _context.CartItems
-                .Include(c => c.Dish)
-                .Where(c => c.AccountId == accountId)
-                .ToListAsync();
-
-            if (!cartItems.Any())
-            {
-                return RedirectToAction("Index", "Cart");
-            }
-
-            var order = new Order
-            {
-                AccountId = accountId,
-                TotalPrice = cartItems.Sum(item => item.Quantity * item.Dish.Price),
-            };
-
-            foreach (var cartItem in cartItems)
-            {
-                order.OrderItems.Add(new OrderItem
-                {
-                    DishId = cartItem.DishId,
-                    Quantity = cartItem.Quantity,
-                    Price = cartItem.Dish.Price
-                });
-            }
-
-            _context.Orders.Add(order);
-            await _context.SaveChangesAsync();
-
-            _context.CartItems.RemoveRange(cartItems); // ✅ Clear cart only for this user
-            await _context.SaveChangesAsync();
-
-            return RedirectToAction("OrderConfirmation", new { orderId = order.Id });
-        }
         [Authorize]
         public async Task<IActionResult> MyOrders(string status = "All")
         {
@@ -177,5 +138,80 @@ namespace FoodProject.Controllers
 
             return RedirectToAction("MyOrders");
         }
+        [HttpPost]
+        public async Task<IActionResult> ApplyVoucher(string code)
+        {
+            var accountId = int.Parse(User.FindFirst("AccountId")?.Value);
+            var cartItems = await _context.CartItems
+                .Include(c => c.Dish)
+                .Where(c => c.AccountId == accountId)
+                .ToListAsync();
+
+            var total = cartItems.Sum(item => item.Quantity * item.Dish.Price);
+
+            var voucher = await _context.Vouchers.FirstOrDefaultAsync(v => v.Code == code);
+            if (voucher != null)
+            {
+                var discountAmount = total * voucher.Discount / 100;
+                var discountedTotal = total - discountAmount;
+
+                return Json(new { success = true, discountedTotal = discountedTotal.ToString("N2"), code = voucher.Code });
+            }
+
+            return Json(new { success = false, message = "Invalid voucher code." });
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> PlaceOrder(string name, string address, string payment, string usedVoucher)
+        {
+            var accountId = int.Parse(User.FindFirst("AccountId")?.Value);
+
+            var cartItems = await _context.CartItems
+                .Include(c => c.Dish)
+                .Where(c => c.AccountId == accountId)
+                .ToListAsync();
+
+            if (!cartItems.Any())
+                return RedirectToAction("Index", "Cart");
+
+            var total = cartItems.Sum(item => item.Quantity * item.Dish.Price);
+            string appliedVoucher = null;
+
+            if (!string.IsNullOrEmpty(usedVoucher))
+            {
+                var voucher = await _context.Vouchers.FirstOrDefaultAsync(v => v.Code == usedVoucher);
+                if (voucher != null)
+                {
+                    total -= total * voucher.Discount / 100;
+                    appliedVoucher = voucher.Code;
+                }
+            }
+
+            var order = new Order
+            {
+                AccountId = accountId,
+                TotalPrice = total,
+                VoucherCode = appliedVoucher
+            };
+
+            foreach (var cartItem in cartItems)
+            {
+                order.OrderItems.Add(new OrderItem
+                {
+                    DishId = cartItem.DishId,
+                    Quantity = cartItem.Quantity,
+                    Price = cartItem.Dish.Price
+                });
+            }
+
+            _context.Orders.Add(order);
+            await _context.SaveChangesAsync();
+
+            _context.CartItems.RemoveRange(cartItems);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("OrderConfirmation", new { orderId = order.Id });
+        }
+
     }
 }

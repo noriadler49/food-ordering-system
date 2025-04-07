@@ -129,7 +129,7 @@
 
                         @if (User.Identity.IsAuthenticated)
                         {
-                            if (User.IsInRole("Staff"))
+                            @if (User.IsInRole("Staff"))
                             {
                                 <li class="nav-item">
                                     <a class="nav-link" asp-controller="Checkout" asp-action="Orders">Orders</a>
@@ -141,9 +141,11 @@
                                     <ul class="dropdown-menu" aria-labelledby="addDropdown">
                                         <li><a class="dropdown-item" asp-controller="Menu" asp-action="AddDish">Add Dish</a></li>
                                         <li><a class="dropdown-item" asp-controller="Ingredient" asp-action="AddIngredient">Add Ingredient</a></li>
+                                        <li><a class="dropdown-item" asp-controller="Menu" asp-action="AddVoucher">Add Voucher</a></li>
                                     </ul>
                                 </li>
                             }
+
                             if (User.IsInRole("User"))
                             {
                                 <li class="nav-item">

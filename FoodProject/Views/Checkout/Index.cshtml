@@ -38,10 +38,38 @@
                     <option value="Cash on Delivery">Cash on Delivery</option>
                 </select>
             </div>
+            <div class="form-group mb-3">
+                <label for="voucher" class="fw-bold">Voucher Code (Optional)</label>
+                <div class="input-group">
+                    <input type="text" class="form-control border-danger" id="voucher">
+                    <button type="button" class="btn btn-outline-danger" id="useVoucherBtn">Use Voucher</button>
+                </div>
+                <!-- Hidden field to store voucher used when form is submitted -->
+                <input type="hidden" name="usedVoucher" id="usedVoucher" />
+            </div>
+
+
             <div class="form-group mb-4">
-                <h5 class="text-center">Total Price: <span class="fw-bold text-danger">@ViewBag.TotalPrice.ToString("N2") Dollars</span></h5>
+                <h5 class="text-center">Total Price: <span id="priceDisplay" class="fw-bold text-danger">@ViewBag.TotalPrice.ToString("N2") Dollars</span></h5>
             </div>
             <button type="submit" class="btn btn-danger w-100">Place Order</button>
         </form>
     </div>
 </div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $("#useVoucherBtn").click(function (e) {
+        e.preventDefault();
+        const code = $("#voucher").val();
+
+        $.post("/Checkout/ApplyVoucher", { code: code }, function (data) {
+            if (data.success) {
+                $("#priceDisplay").text(data.discountedTotal + " Dollars");
+
+                $("#usedVoucher").val(data.code); // Store voucher in hidden field
+            } else {
+                alert(data.message);
+            }
+        });
+    });
+</script>

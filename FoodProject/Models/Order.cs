@@ -11,6 +11,7 @@ namespace FoodProject.Models
         public double TotalPrice { get; set; }
         public List<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
         public string Status { get; set; } = "Pending"; // ✅ Order status tracking
+        public string? VoucherCode { get; set; }
     }
 
 

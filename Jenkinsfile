@@ -29,8 +29,9 @@ stage ('build') {
 	stage ('Publish') {
 		steps {
 			echo 'public 2 runnig folder'
-		//iisreset /stop // stop iis de ghi de file 
+		    bat 'iisreset /stop' // stop iis de ghi de file 
 			bat 'dotnet publish -c Release -o "e:\\wwwroot\\food-ordering-system"'
+			bat 'iisreset /start' // start iis de ghi de file
 
  		}
 	}

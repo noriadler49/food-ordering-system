@@ -12,14 +12,13 @@ pipeline {
 		steps {
 			echo 'public 2 runnig folder'
 		//iisreset /stop // stop iis de ghi de file 
-			bat 'xcopy "%WORKSPACE%\\publish" /E /Y /I /R "e:\\wwwroot\\food-ordering-system"'
+			bat 'xcopy "%WORKSPACE%" /E /Y /I /R "e:\\wwwroot\\food-ordering-system"'
  		}
 	}
 	stage('Deploy to IIS') {
             steps {
                 powershell '''
                
-                # Tạo website nếu chưa có
                 Import-Module WebAdministration
                 if (-not (Test-Path IIS:\\Sites\\MySite)) {
                     New-Website -Name "MySite" -Port 81 -PhysicalPath "e:\\wwwroot\\food-ordering-system"

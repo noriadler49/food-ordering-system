@@ -12,7 +12,8 @@ pipeline {
 		steps {
 			echo 'public 2 runnig folder'
 		//iisreset /stop // stop iis de ghi de file 
-			bat 'xcopy "%WORKSPACE%" /E /Y /I /R "e:\\wwwroot\\food-ordering-system"'
+			bat 'dotnet publish -c Release -o "e:\\wwwroot\\food-ordering-system"'
+
  		}
 	}
 	stage('Deploy to IIS') {

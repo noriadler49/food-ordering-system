@@ -50,7 +50,7 @@ namespace FoodProject.Controllers
                 return Content($"General error: {ex.Message}");
             }
         }
-
+        //testing jenkins
         public IActionResult Login()
         {
             return View();

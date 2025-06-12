@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Norial\\Documents\\Schools\\Coding\\webBackEnd\\FoodProject\\FoodProject\\FoodProject.csproj": {}
+    "C:\\Users\\Norial\\Documents\\GitHub\\food-ordering-system\\FoodProject\\FoodProject.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Norial\\Documents\\Schools\\Coding\\webBackEnd\\FoodProject\\FoodProject\\FoodProject.csproj": {
+    "C:\\Users\\Norial\\Documents\\GitHub\\food-ordering-system\\FoodProject\\FoodProject.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Norial\\Documents\\Schools\\Coding\\webBackEnd\\FoodProject\\FoodProject\\FoodProject.csproj",
+        "projectUniqueName": "C:\\Users\\Norial\\Documents\\GitHub\\food-ordering-system\\FoodProject\\FoodProject.csproj",
         "projectName": "FoodProject",
-        "projectPath": "C:\\Users\\Norial\\Documents\\Schools\\Coding\\webBackEnd\\FoodProject\\FoodProject\\FoodProject.csproj",
+        "projectPath": "C:\\Users\\Norial\\Documents\\GitHub\\food-ordering-system\\FoodProject\\FoodProject.csproj",
         "packagesPath": "C:\\Users\\Norial\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Norial\\Documents\\Schools\\Coding\\webBackEnd\\FoodProject\\FoodProject\\obj\\",
+        "outputPath": "C:\\Users\\Norial\\Documents\\GitHub\\food-ordering-system\\FoodProject\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

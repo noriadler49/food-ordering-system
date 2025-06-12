@@ -25,7 +25,7 @@ namespace FoodProject.Controllers
                 .Take(3)
                 .ToList();
 
-            var totalUsers = _context.Accounts.Count();
+            var totalUsers = _context.Accounts.Count(a => a.Role == "User");
 
             var viewModel = new HomePageViewModel
             {

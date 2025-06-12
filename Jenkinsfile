@@ -30,7 +30,7 @@ stage ('build') {
 		steps {
 			echo 'public 2 runnig folder'
 		    bat 'iisreset /stop' // stop iis de ghi de file 
-			bat 'dotnet publish -c Release -o "e:\\wwwroot\\food-ordering-system"'
+			bat 'dotnet publish -c Debug -o "e:\\wwwroot\\food-ordering-system"'
 			bat 'iisreset /start' // start iis de ghi de file
 
  		}

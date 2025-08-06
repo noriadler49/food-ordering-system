@@ -1182,7 +1182,6 @@ C:\Users\Norial\Documents\GitHub\food-ordering-system\FoodProject\obj\Debug\net9
 C:\Users\Norial\Documents\GitHub\food-ordering-system\FoodProject\obj\Debug\net9.0\staticwebassets.build.json.cache
 C:\Users\Norial\Documents\GitHub\food-ordering-system\FoodProject\obj\Debug\net9.0\staticwebassets.development.json
 C:\Users\Norial\Documents\GitHub\food-ordering-system\FoodProject\obj\Debug\net9.0\staticwebassets.build.endpoints.json
-C:\Users\Norial\Documents\GitHub\food-ordering-system\FoodProject\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt
 C:\Users\Norial\Documents\GitHub\food-ordering-system\FoodProject\obj\Debug\net9.0\FoodProj.4BE1FC61.Up2Date
 C:\Users\Norial\Documents\GitHub\food-ordering-system\FoodProject\obj\Debug\net9.0\FoodProject.dll
 C:\Users\Norial\Documents\GitHub\food-ordering-system\FoodProject\obj\Debug\net9.0\refint\FoodProject.dll
